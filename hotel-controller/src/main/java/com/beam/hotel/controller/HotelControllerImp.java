@@ -1,10 +1,10 @@
 package com.beam.hotel.controller;
 
 import com.beam.hotel.exception.HotelException;
-import com.beam.hotel.gateway.HotelGateway;
 import com.beam.hotel.hateoas.Hypermedia;
 import com.beam.hotel.request.GetHotelRequest;
 import com.beam.hotel.response.GetHotelResponse;
+import com.beam.hotel.service.HotelService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.Collection;
 public class HotelControllerImp implements HotelController {
 
     @Autowired
-    private HotelGateway gateway;
+    private HotelService service;
     private Hypermedia hypermedia = new Hypermedia();
 
     @Override
@@ -32,7 +32,7 @@ public class HotelControllerImp implements HotelController {
     public Collection<Resource<GetHotelResponse>> getHotels(@PathVariable String fromDate, @PathVariable String toDate, @PathVariable String city, @PathVariable Integer numberOfAdults) {
         try {
             Collection<Resource<GetHotelResponse>> resources = new ArrayList<>();
-            gateway.getHotels(new GetHotelRequest(fromDate, toDate, city, numberOfAdults)).forEach(e -> {
+            service.getHotels(new GetHotelRequest(fromDate, toDate, city, numberOfAdults)).forEach(e -> {
                 resources.add(hypermedia.getAccountResources(e));
             });
             return resources;

@@ -11,13 +11,12 @@ import static java.util.Objects.isNull;
 public class HotelValidation {
 
     public void getHotelsRequestValidation(GetHotelRequest request) {
-        this.requestValidation.validate(request);
         this.fromDateValidation.validate(request.getFromDate());
         this.toDateValidation.validate(request.getToDate());
         this.fromDateFormatValidation.validate(request.getFromDate());
-        this.toDateFormatValidation.validate(request.getFromDate());
+        this.toDateFormatValidation.validate(request.getToDate());
         this.fromDateWithCurrentValidation.validate(request.getFromDate());
-        this.toDateWithCurrentValidation.validate(request.getFromDate());
+        this.toDateWithCurrentValidation.validate(request.getToDate());
         this.cityValidation.validate(request.getCity());
         this.cityIATAValidation.validate(request.getCity());
         this.numberOfAdultsValidation.validate(request.getNumberOfAdults());
@@ -29,12 +28,6 @@ public class HotelValidation {
     public interface Validation<T> {
         void validate(T value);
     }
-
-    private Validation<GetHotelRequest> requestValidation = (value -> {
-        if (isNull(value)) {
-            throw new InvalidHotelRequestException("Invalid hotel request");
-        }
-    });
 
     private Validation<String> fromDateValidation = (value -> {
         if (isNull(value) || value.trim().isEmpty()) {

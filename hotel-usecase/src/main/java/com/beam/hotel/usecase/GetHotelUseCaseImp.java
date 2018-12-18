@@ -18,16 +18,12 @@ public class GetHotelUseCaseImp implements GetHotelUseCase {
     }
 
     @Override
-    public Collection<GetHotelResponse> getHotels(GetHotelRequest request) {
-        try {
-            Collection<GetHotelResponse> hotels = new ArrayList<>();
-            repository.getHotels(buildHotelFilter(request)).forEach(e -> {
-                hotels.add(new GetHotelResponse(e.getProvider(), e.getHotelName(), e.getFarePerNight(), e.getAmenities()));
-            });
-            return hotels;
-        }catch (Exception ex) {
-            throw new HotelException(ex.getMessage());
-        }
+    public Collection<GetHotelResponse> getHotels(GetHotelRequest request) throws HotelException{
+        Collection<GetHotelResponse> hotels = new ArrayList<>();
+        repository.getHotels(buildHotelFilter(request)).forEach(e -> {
+            hotels.add(new GetHotelResponse(e.getProvider(), e.getHotelName(), e.getFarePerNight(), e.getAmenities()));
+        });
+        return hotels;
     }
 
     private Hotel buildHotelFilter(GetHotelRequest request) {

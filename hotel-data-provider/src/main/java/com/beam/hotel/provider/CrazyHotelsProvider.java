@@ -6,15 +6,18 @@ import com.beam.hotel.response.CrazyHotelsResponse;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class CrazyHotelsProvider {
+import static java.util.Objects.isNull;
+
+public class CrazyHotelsProvider implements HotelDataProvider{
 
     private static final String REST_URI = "http://localhost:8082/crazyHotel";
     private Client client = ClientBuilder.newClient();
@@ -48,25 +51,30 @@ public class CrazyHotelsProvider {
     }
 
     private Collection<CrazyHotelsResponse> getCrazyHotels(Response response) {
-        Collection<CrazyHotelsResponse> bestHotels;
-        bestHotels = response.readEntity(new GenericType<Collection<CrazyHotelsResponse>>() {});
-        return bestHotels;
+        if (isNull(response)) return new ArrayList<>();
+        return response.readEntity(new GenericType<Collection<CrazyHotelsResponse>>() {});
     }
 
     private Response callService(CrazyHotelsRequest request) {
-        return client.target(REST_URI)
+        WebTarget webTarget = client.target(REST_URI)
                 .path(request.getFrom())
                 .path(request.getTo())
                 .path(request.getCity())
-                .queryParam(String.valueOf(request.getAdultsCount()))
-                .request(MediaType.APPLICATION_JSON)
-                .get();
+                .path(String.valueOf(request.getAdultsCount()));
+        Invocation.Builder invocationBuilder =  webTarget.request("application/hal+json");
+        Response response = null;
+        try {
+            response = invocationBuilder.get();
+        }catch (Exception ex) {
+            System.out.println("Crazy Provider Connection Error:" + ex.getMessage());
+        }
+        return response;
     }
 
     private CrazyHotelsRequest buildCrazyHotelRequest(Hotel hotel) {
         return new CrazyHotelsRequest.Builder()
-                .from(ZonedDateTime.parse(hotel.getFromDate()).format(DateTimeFormatter.ISO_INSTANT))
-                .to(ZonedDateTime.parse(hotel.getToDate()).format(DateTimeFormatter.ISO_INSTANT))
+                .from(String.valueOf(ZonedDateTime.parse(hotel.getFromDate()+"T00:00:00.000Z").format(DateTimeFormatter.ISO_INSTANT)))
+                .to(String.valueOf(ZonedDateTime.parse(hotel.getToDate()+"T00:00:00.000Z").format(DateTimeFormatter.ISO_INSTANT)))
                 .city(hotel.getCity())
                 .adultsCount(hotel.getNumberOfAdults())
                 .build();

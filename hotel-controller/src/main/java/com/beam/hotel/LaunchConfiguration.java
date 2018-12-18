@@ -1,10 +1,7 @@
 package com.beam.hotel;
 
-import com.beam.hotel.gateway.HotelGateway;
-import com.beam.hotel.provider.HotelProvider;
-import com.beam.hotel.repository.HotelRepository;
-import com.beam.hotel.service.HotelService;
-import com.beam.hotel.service.HotelServiceImp;
+import com.beam.hotel.configuration.ApiConfiguration;
+import com.beam.hotel.configuration.ProviderConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,17 +9,13 @@ import org.springframework.context.annotation.Configuration;
 public class LaunchConfiguration {
 
     @Bean
-    public HotelService getHotelService() {
-        return new HotelServiceImp(getHotelRepository());
+    public ApiConfiguration apiConfiguration() {
+        return new ApiConfiguration();
     }
 
     @Bean
-    public HotelRepository getHotelRepository() {
-        return new HotelProvider();
+    public ProviderConfiguration providerConfiguration() {
+        return new ProviderConfiguration();
     }
 
-    @Bean
-    public HotelGateway getHotelGateway() {
-        return new HotelGateway();
-    }
 }

@@ -13,7 +13,6 @@
         <module>hotel-usecase</module>
         <module>hotel-repository</module>
         <module>hotel-data-provider</module>
-        <module>hotel-gateway</module>
         <module>hotel-controller</module>
     </modules>
 

@@ -10,6 +10,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
+    <artifactId>hotel-data-provider</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>com.beam.hotel</groupId>
@@ -24,7 +26,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <artifactId>hotel-data-provider</artifactId>
-
-
 </project>
