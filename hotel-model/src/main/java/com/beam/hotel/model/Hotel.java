@@ -1,7 +1,5 @@
 package com.beam.hotel.model;
 
-import java.math.BigDecimal;
-
 public class Hotel {
 
     private String fromDate;
@@ -10,21 +8,25 @@ public class Hotel {
     private Integer numberOfAdults;
     private String provider;
     private String hotelName;
-    private BigDecimal fare;
+    private String farePerNight;
     private String [] amenities;
+    private Float rate;
+    private Integer discount;
 
     public Hotel() {
     }
 
-    public Hotel(String fromDate, String toDate, String city, Integer numberOfAdults, String provider, String hotelName, BigDecimal fare, String[] amenities) {
+    public Hotel(String fromDate, String toDate, String city, Integer numberOfAdults, String provider, String hotelName, String farePerNight, String[] amenities, Float rate, Integer discount) {
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.city = city;
         this.numberOfAdults = numberOfAdults;
         this.provider = provider;
         this.hotelName = hotelName;
-        this.fare = fare;
+        this.farePerNight = farePerNight;
         this.amenities = amenities;
+        this.rate = rate;
+        this.discount = discount;
     }
 
     public String getFromDate() {
@@ -51,12 +53,20 @@ public class Hotel {
         return hotelName;
     }
 
-    public BigDecimal getFare() {
-        return fare;
+    public String getFarePerNight() {
+        return farePerNight;
     }
 
     public String[] getAmenities() {
         return amenities;
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public Integer getDiscount() {
+        return discount;
     }
 
     public static class Builder {
@@ -67,8 +77,10 @@ public class Hotel {
         private Integer numberOfAdults;
         private String provider;
         private String hotelName;
-        private BigDecimal fare;
+        private String farePerNight;
         private String [] amenities;
+        private Float rate;
+        private Integer discount;
 
         public Builder fromDate(String fromDate) {
             this.fromDate = fromDate;
@@ -100,8 +112,8 @@ public class Hotel {
             return this;
         }
 
-        public Builder fare(BigDecimal fare) {
-            this.fare = fare;
+        public Builder farePerNight(String farePerNight) {
+            this.farePerNight = farePerNight;
             return this;
         }
 
@@ -110,8 +122,18 @@ public class Hotel {
             return this;
         }
 
+        public Builder rate(Float rate) {
+            this.rate = rate;
+            return this;
+        }
+
+        public Builder discount(Integer discount) {
+            this.discount = discount;
+            return this;
+        }
+
         public Hotel build() {
-            return new Hotel(fromDate, toDate, city, numberOfAdults, provider, hotelName, fare, amenities);
+            return new Hotel(fromDate, toDate, city, numberOfAdults, provider, hotelName, farePerNight, amenities, rate, discount);
         }
     }
 }

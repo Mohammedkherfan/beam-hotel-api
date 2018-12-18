@@ -5,16 +5,17 @@ import java.util.regex.Pattern;
 
 public class IATACodeValidation {
 
-    private static final String EMAIL_REGEX = "/^[A-Z]{3}$/";
+    private static final String REGEX = "([A-Z]{3,3})|([A-Z] [A-Z])";
     private static Pattern pattern;
-    private static Matcher matcher;
+    private Matcher matcher;
 
     public IATACodeValidation() {
-        pattern = Pattern.compile(EMAIL_REGEX, Pattern.CASE_INSENSITIVE);
+        pattern = Pattern.compile(REGEX, Pattern.CASE_INSENSITIVE);
     }
 
-    public static Boolean validate(String email) {
+    public Boolean validate(String email) {
         matcher = pattern.matcher(email);
-        return matcher.matches();
+        Boolean result = matcher.matches();
+        return result;
     }
 }

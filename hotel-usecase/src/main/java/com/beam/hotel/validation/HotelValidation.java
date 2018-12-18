@@ -22,6 +22,7 @@ public class HotelValidation {
         this.cityIATAValidation.validate(request.getCity());
         this.numberOfAdultsValidation.validate(request.getNumberOfAdults());
         this.numberOfAdultsGreaterThenZeroValidation.validate(request.getNumberOfAdults());
+        checkFromAndToDate(request.getFromDate(), request.getToDate());
     }
 
     @FunctionalInterface
@@ -78,7 +79,8 @@ public class HotelValidation {
     });
 
     private Validation<String> cityIATAValidation = (value -> {
-        if (!IATACodeValidation.validate(value)) {
+        IATACodeValidation validation = new IATACodeValidation();
+        if (!validation.validate(value)) {
             throw new InvalidHotelCityException("Invalid hotel city - city not match with IATA RegEx");
         }
     });
@@ -103,5 +105,10 @@ public class HotelValidation {
         }catch (Exception ex) {
             return Boolean.FALSE;
         }
+    }
+
+    private void checkFromAndToDate(String fromDate, String toDate) {
+        if (LocalDate.parse(fromDate).isAfter(LocalDate.parse(toDate)) || LocalDate.parse(toDate).isBefore(LocalDate.parse(fromDate)))
+            throw new HotelException("Invalid from or to date, maybe from date is after to date or else");
     }
 }

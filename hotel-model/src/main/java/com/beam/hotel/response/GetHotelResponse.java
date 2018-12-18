@@ -1,18 +1,16 @@
 package com.beam.hotel.response;
 
-import java.math.BigDecimal;
-
 public class GetHotelResponse {
 
     private String provider;
     private String hotelName;
-    private BigDecimal fare;
+    private String fare;
     private String [] amenities;
 
     public GetHotelResponse() {
     }
 
-    public GetHotelResponse(String provider, String hotelName, BigDecimal fare, String[] amenities) {
+    public GetHotelResponse(String provider, String hotelName, String fare, String[] amenities) {
         this.provider = provider;
         this.hotelName = hotelName;
         this.fare = fare;
@@ -35,11 +33,11 @@ public class GetHotelResponse {
         this.hotelName = hotelName;
     }
 
-    public BigDecimal getFare() {
+    public String getFare() {
         return fare;
     }
 
-    public void setFare(BigDecimal fare) {
+    public void setFare(String fare) {
         this.fare = fare;
     }
 

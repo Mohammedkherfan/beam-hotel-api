@@ -22,7 +22,7 @@ public class GetHotelUseCaseImp implements GetHotelUseCase {
         try {
             Collection<GetHotelResponse> hotels = new ArrayList<>();
             repository.getHotels(buildHotelFilter(request)).forEach(e -> {
-                hotels.add(new GetHotelResponse(e.getProvider(), e.getHotelName(), e.getFare(), e.getAmenities()));
+                hotels.add(new GetHotelResponse(e.getProvider(), e.getHotelName(), e.getFarePerNight(), e.getAmenities()));
             });
             return hotels;
         }catch (Exception ex) {
