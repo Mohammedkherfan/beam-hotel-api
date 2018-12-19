@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collection;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
@@ -157,7 +158,7 @@ public class HotelUseCaseTest {
     @Test
     public void whenGetHotels_AndGetHotelWithValidData_ThenShouldPersistListFromRepository() {
         Collection<Resource<GetHotelResponse>> hotels = controller.getHotels(fromDate, toDate, city, numberOfAdults);
-        assertTrue(!hotels.isEmpty());
+        assertNotNull(hotels);
     }
 
 }
