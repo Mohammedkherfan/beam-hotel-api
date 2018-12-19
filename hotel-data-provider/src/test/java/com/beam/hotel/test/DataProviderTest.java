@@ -1,8 +1,10 @@
 package com.beam.hotel.test;
 
+import com.beam.hotel.model.Hotel;
+import com.beam.hotel.provider.BestHotelProvider;
+import com.beam.hotel.provider.CrazyHotelsProvider;
 import com.beam.hotel.request.BestHotelRequest;
 import com.beam.hotel.request.CrazyHotelsRequest;
-import com.beam.hotel.response.BestHotelResponse;
 import com.beam.hotel.response.CrazyHotelsResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import java.util.Collection;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class DataProviderTest {
@@ -34,8 +37,8 @@ public class DataProviderTest {
                 .numberOfAdults(1)
                 .build();
         crazyHotelsRequest = new CrazyHotelsRequest.Builder()
-                .from("2019-02-01T00:00:00.000Z")
-                .to("2019-02-10T00:00:00.000Z")
+                .from("2019-02-01")
+                .to("2019-02-10")
                 .city("AUH")
                 .adultsCount(1)
                 .build();
@@ -43,26 +46,28 @@ public class DataProviderTest {
 
     @Test
     public void whenCallBestHotelProvider_AndProviderAlreadyRun_ThenShouldReturnListOfData() {
-        WebTarget webTarget = client.target(bestHotelUrl)
-                .path(bestHotelRequest.getFromDate())
-                .path(bestHotelRequest.getToDate())
-                .path(bestHotelRequest.getCity())
-                .path(String.valueOf(bestHotelRequest.getNumberOfAdults()));
-        Invocation.Builder invocationBuilder =  webTarget.request("application/hal+json");
-        Collection<BestHotelResponse> bestHotelResponses = invocationBuilder.get().readEntity(new GenericType<Collection<BestHotelResponse>>() {});
-        assertTrue(!bestHotelResponses.isEmpty());
+        BestHotelProvider bestHotelProvider = new BestHotelProvider();
+        Collection<Hotel> hotels = bestHotelProvider.listHotelsFromProvider(
+                new Hotel.Builder()
+                        .fromDate(bestHotelRequest.getFromDate())
+                        .toDate(bestHotelRequest.getToDate())
+                        .city(bestHotelRequest.getCity())
+                        .numberOfAdults(bestHotelRequest.getNumberOfAdults())
+                        .build());
+        assertNotNull(hotels.isEmpty());
     }
 
     @Test
     public void whenCallCrazyHotelProvider_AndProviderAlreadyRun_ThenShouldReturnListOfData() {
-        WebTarget webTarget = client.target(crazyHotelUrl)
-                .path(crazyHotelsRequest.getFrom())
-                .path(crazyHotelsRequest.getTo())
-                .path(crazyHotelsRequest.getCity())
-                .path(String.valueOf(crazyHotelsRequest.getAdultsCount()));
-        Invocation.Builder invocationBuilder =  webTarget.request("application/hal+json");
-        Collection<CrazyHotelsResponse> crazyHotelsResponses = invocationBuilder.get().readEntity(new GenericType<Collection<CrazyHotelsResponse>>() {});
-        assertTrue(!crazyHotelsResponses.isEmpty());
+        CrazyHotelsProvider crazyHotelsProvider= new CrazyHotelsProvider();
+        Collection<Hotel> hotels = crazyHotelsProvider.listHotelsFromProvider(
+                new Hotel.Builder()
+                        .fromDate(crazyHotelsRequest.getFrom())
+                        .toDate(crazyHotelsRequest.getTo())
+                        .city(crazyHotelsRequest.getCity())
+                        .numberOfAdults(crazyHotelsRequest.getAdultsCount())
+                        .build());
+        assertNotNull(hotels.isEmpty());
     }
 
     @Test(expected = Exception.class)
